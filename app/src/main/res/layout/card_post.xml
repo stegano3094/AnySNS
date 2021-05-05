@@ -82,12 +82,12 @@
             android:layout_height="30dp"
             android:layout_margin="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/commentCountTextView"
+            app:layout_constraintEnd_toStartOf="@+id/commentCountText"
             app:layout_constraintTop_toTopOf="@+id/guideline3"
             app:srcCompat="@drawable/comment" />
 
         <TextView
-            android:id="@+id/commentCountTextView"
+            android:id="@+id/commentCountText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"

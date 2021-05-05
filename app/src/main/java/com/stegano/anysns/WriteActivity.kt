@@ -23,7 +23,7 @@ class WriteActivity : AppCompatActivity() {
     var currentBgPosition = 0
 
     val bgList = mutableListOf(
-        "android.resource://com.stegano.anysns/drawable/default_bg",
+        "android.resource://[com.stegano.anysns]/drawable/default_bg",
         "android.resource://com.stegano.anysns/drawable/bg2",
         "android.resource://com.stegano.anysns/drawable/bg3",
         "android.resource://com.stegano.anysns/drawable/bg4",
