@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "381042591902",
+    "project_id": "anysns-b76fb",
+    "storage_bucket": "anysns-b76fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381042591902:android:a8f35a40af6f14a090d38f",
+        "android_client_info": {
+          "package_name": "com.stegano.anysns"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381042591902-q2vuqaevp6plc45l65bth78o755oe7kc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ11y131UkQmhNLYM-PFvadiH3Px5CCTY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381042591902-q2vuqaevp6plc45l65bth78o755oe7kc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

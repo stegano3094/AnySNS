@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
 }
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -39,8 +40,9 @@ dependencies {
     api 'com.squareup.picasso:picasso:2.71828'
     // 시간 관련 라이브러리
     implementation 'net.danlew:android.joda:2.10.2'
-    // 파이어베이스
-    implementation 'com.google.firebase:firebase-core:18.0.3'
+    // 파이어베이스 SDK
+    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-database:19.7.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
