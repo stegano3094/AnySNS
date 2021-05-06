@@ -12,10 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_post.view.*
@@ -71,7 +68,71 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = MyAdapter()
 
         // Firebase에서 Post 데이터를 가져온 후 posts 변수에 저장
+        FirebaseDatabase.getInstance().getReference("/Posts")
+            .orderByChild("writeTime").addChildEventListener(object: ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {  // 글이 추가된 경우
+                    snapshot.let { snapshot ->
+                        val post = snapshot.getValue(Post::class.java)
+                        post?.let {
+                            if(previousChildName == null) {
+                                posts.add(it)
+                                recyclerView.adapter?.notifyItemChanged(posts.size - 1)
+                            } else {
+                                val prevIndex = posts.map { it.postId }.indexOf(previousChildName)
+                                posts.add(prevIndex + 1, post)
+                                recyclerView.adapter?.notifyItemInserted(prevIndex + 1)
+                            }
+                        }
+                    }
+                }
 
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {  // 글이 변경된 경우
+                    snapshot.let {
+                        snapshot ->
+                        val post = snapshot.getValue(Post::class.java)
+                        post?.let { post ->
+                            val prevIndex = posts.map { it.postId }.indexOf(previousChildName)
+                            posts[prevIndex + 1] = post
+                            recyclerView.adapter?.notifyItemChanged(prevIndex + 1)
+                        }
+                    }
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {  // 글이 삭제된 경우
+                    snapshot.let {
+                        val post = snapshot.getValue(Post::class.java)
+                        post?.let { post ->
+                            val exitsIndex = posts.map { it.postId }.indexOf(post.postId)
+                            posts.removeAt(exitsIndex)
+                            recyclerView.adapter?.notifyItemRemoved(exitsIndex)
+                        }
+                    }
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {  // 글의 순서가 변경된 경우
+                    snapshot.let {
+                        val post = snapshot.getValue(Post::class.java)
+                        post?.let { post ->
+                            val existIndex = posts.map { it.postId }.indexOf(post.postId)
+                            posts.removeAt(existIndex)
+                            recyclerView.adapter?.notifyItemChanged(existIndex)
+
+                            if(previousChildName == null) {
+                                posts.add(post)
+                                recyclerView.adapter?.notifyItemChanged(posts.size + 1)
+                            } else {
+                                val prevIndex = posts.map { it.postId }.indexOf(previousChildName)
+                                posts.add(prevIndex + 1, post)
+                                recyclerView.adapter?.notifyItemChanged(prevIndex + 1)
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {  // 취소된 경우
+                    error.toException().printStackTrace()
+                }
+            })
     }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
