@@ -158,6 +158,11 @@ class MainActivity : AppCompatActivity() {
             holder.contentsText.text = post.message
             holder.timeTextView.text = getDiffTimeText(post.writeTime as Long)
             holder.commentCountText.text = "0"
+            holder.itemView.setOnClickListener {
+                val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                intent.putExtra("postId", post.postId)
+                startActivity(intent)
+            }
         }
 
         override fun getItemCount(): Int {
