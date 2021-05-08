@@ -34,10 +34,18 @@ class WriteActivity : AppCompatActivity() {
         "android.resource://com.stegano.anysns/drawable/bg9"
     )
 
+    var mode = "post"
+    var postId = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_write)
         supportActionBar?.title = "글쓰기"
+
+        intent.getStringExtra("mode")?.let {
+            mode = intent.getStringExtra("mode")!!
+            postId = intent.getStringExtra("postId")!!
+        }
 
         recyclerViewSet()
 
@@ -47,16 +55,29 @@ class WriteActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val post = Post()
-            val newRef = FirebaseDatabase.getInstance().getReference("Posts").push()
-            post.writeTime = ServerValue.TIMESTAMP
-            post.bgUri = bgList[currentBgPosition]
-            post.message = input.text.toString()
-            post.writerId = getMyId()
-            post.postId = newRef.key.toString()
-            newRef.setValue(post)
-            Toast.makeText(this, "공유되었습니다.", Toast.LENGTH_SHORT).show()
-            finish()
+            if(mode == "post") {
+                val post = Post()
+                val newRef = FirebaseDatabase.getInstance().getReference("Posts").push()
+                post.writeTime = ServerValue.TIMESTAMP
+                post.bgUri = bgList[currentBgPosition]
+                post.message = input.text.toString()
+                post.writerId = getMyId()
+                post.postId = newRef.key.toString()
+                newRef.setValue(post)
+                Toast.makeText(this, "공유되었습니다.", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                val comment = Comment()
+                val newRef = FirebaseDatabase.getInstance().getReference("Comments/$postId").push()
+                comment.writeTime = ServerValue.TIMESTAMP
+                comment.bgUri = bgList[currentBgPosition]
+                comment.message = input.text.toString()
+                comment.writerId = getMyId()
+                comment.commentId = newRef.key.toString()
+                newRef.setValue(comment)
+                Toast.makeText(this, "공유되었습니다.", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
 
     }
